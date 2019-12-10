@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -154,23 +155,22 @@ namespace ProjektZespolowy2.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                Profile profile = new Profile();
-                profile.Email = model.Email;
+                Profile profile = new Profile() { Email = model.Email };
 
-                //var Browser = Request.Browser;
-                //Browser b = new Browser();
-                //b.Name = Browser.Browser;
-                //Profile.Browsers.Add(b);
+                var Browser = Request.Browser;
+                Browser b = new Browser() { Name = Browser.Browser};
+                profile.Browsers.Add(b);
 
-                //var macAddr = (
-                //        from nic in NetworkInterface.GetAllNetworkInterfaces()
-                //        where nic.OperationalStatus == OperationalStatus.Up
-                //        select nic.GetPhysicalAddress().ToString()
-                //    ).FirstOrDefault();
+                
+                var macAddr = (
+                        from nic in NetworkInterface.GetAllNetworkInterfaces()
+                        where nic.OperationalStatus == OperationalStatus.Up
+                        select nic.GetPhysicalAddress().ToString()
+                    ).FirstOrDefault();
 
-                //MAC mac = new MAC();
-                //mac.MACAdress = macAddr;
-                //Profile.MACs.Add(mac);
+                MAC mac = new MAC();
+                mac.MACAdress = macAddr;
+                profile.Macs.Add(mac);
 
                 context.Profile.Add(profile);
                 context.SaveChanges();

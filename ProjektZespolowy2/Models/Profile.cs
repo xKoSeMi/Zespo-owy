@@ -14,5 +14,11 @@ namespace ProjektZespolowy2.Models
 
         public List<MAC> Macs { get; set; }
         public List<Browser> Browsers { get; set; }
+
+        public Profile()
+        {
+            Macs = new List<MAC>();
+            Browsers = new List<Browser>();
+        }
     }
 }
