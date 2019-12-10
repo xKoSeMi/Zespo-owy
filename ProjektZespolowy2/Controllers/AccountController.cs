@@ -17,6 +17,7 @@ namespace ProjektZespolowy2.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext context = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -153,6 +154,28 @@ namespace ProjektZespolowy2.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                Profile profile = new Profile();
+                profile.Email = model.Email;
+
+                //var Browser = Request.Browser;
+                //Browser b = new Browser();
+                //b.Name = Browser.Browser;
+                //Profile.Browsers.Add(b);
+
+                //var macAddr = (
+                //        from nic in NetworkInterface.GetAllNetworkInterfaces()
+                //        where nic.OperationalStatus == OperationalStatus.Up
+                //        select nic.GetPhysicalAddress().ToString()
+                //    ).FirstOrDefault();
+
+                //MAC mac = new MAC();
+                //mac.MACAdress = macAddr;
+                //Profile.MACs.Add(mac);
+
+                context.Profile.Add(profile);
+                context.SaveChanges();
+
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);

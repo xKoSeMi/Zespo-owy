@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using ProjektZespolowy2.Migrations;
 
 namespace ProjektZespolowy2.Models
 {
@@ -20,9 +21,24 @@ namespace ProjektZespolowy2.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Profile> Profile { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationUser>().ToTable("ProjektZespolowy_Users", "dbo");
+            modelBuilder.Entity<IdentityRole>().ToTable("ProjektZespolowy_Roles", "dbo");
+            modelBuilder.Entity<IdentityUserRole>().ToTable("ProjektZespolowy_UserRoles", "dbo");
+            modelBuilder.Entity<IdentityUserClaim>().ToTable("ProjektZespolowy_UserClaims", "dbo");
+            modelBuilder.Entity<IdentityUserLogin>().ToTable("ProjektZespolowy_UserLogins", "dbo");
+            modelBuilder.Entity<Profile>().ToTable("ProjektZespolowy_Profile", "dbo");
         }
 
         public static ApplicationDbContext Create()
