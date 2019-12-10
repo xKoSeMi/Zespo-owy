@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "Confirm Browser";
+}
+
+<h2> Czy chcesz dodać przeglądarkę do zaufanych? </h2>
+
+<button class="btn btn-warning" id="button" onclick="location.href='@Url.Action("AddBrowser/")'">Tak</button>
+<button class="btn btn-info" id="button" onclick="location.href='@Url.Action("DoNotAddBrowser/")'">Nie</button>
+

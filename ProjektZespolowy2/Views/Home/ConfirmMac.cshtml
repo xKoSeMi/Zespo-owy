@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "ConfirmMac";
+}
+
+<h2> Czy chcesz dodać adres MAC do zaufanych? </h2>
+
+<button class="btn btn-warning" id="button" onclick="location.href='@Url.Action("AddMac/")'">Tak</button>
+<button class="btn btn-info" id="button" onclick="location.href='@Url.Action("DoNotAddMac/")'">Nie</button>
+
