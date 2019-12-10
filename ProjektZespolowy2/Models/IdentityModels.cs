@@ -22,6 +22,8 @@ namespace ProjektZespolowy2.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Profile> Profile { get; set; }
+        public DbSet<MAC> MACs { get; set; }
+        public DbSet<Browser> Browsers { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -39,6 +41,8 @@ namespace ProjektZespolowy2.Models
             modelBuilder.Entity<IdentityUserClaim>().ToTable("ProjektZespolowy_UserClaims", "dbo");
             modelBuilder.Entity<IdentityUserLogin>().ToTable("ProjektZespolowy_UserLogins", "dbo");
             modelBuilder.Entity<Profile>().ToTable("ProjektZespolowy_Profile", "dbo");
+            modelBuilder.Entity<MAC>().ToTable("ProjektZespolowy_MAC", "dbo");
+            modelBuilder.Entity<Browser>().ToTable("ProjektZespolowy_Browser", "dbo");
         }
 
         public static ApplicationDbContext Create()

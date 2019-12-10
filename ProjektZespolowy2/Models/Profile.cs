@@ -12,7 +12,7 @@ namespace ProjektZespolowy2.Models
         public bool isAuthenticated { get; set; }
         public string Code { get; set; }
 
-        public List<string> Macs { get; set; }
-        public List<string> Browsers { get; set; }
+        public List<MAC> Macs { get; set; }
+        public List<Browser> Browsers { get; set; }
     }
 }
