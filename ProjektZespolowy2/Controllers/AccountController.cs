@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -179,12 +180,30 @@ namespace ProjektZespolowy2.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Wyślij wiadomość e-mail z tym łączem
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var smtpClient = new System.Net.Mail.SmtpClient
+                    {
+                        Host = ConfigurationManager.AppSettings["SmtpHost"],
+                        Credentials = new System.Net.NetworkCredential(
+                        ConfigurationManager.AppSettings["Sender"],
+                        ConfigurationManager.AppSettings["Password"]),
+                        EnableSsl = true
+                    };
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { code = code }, protocol: Request.Url.Scheme);
+                    var message = new System.Net.Mail.MailMessage(ConfigurationManager.AppSettings["Sender"], user.Email)
+                    {
+                        Subject = "Potwierdź konto",
+                        IsBodyHtml = true,
+                        Body = "Witamy w naszej aplikacji!<br/>" +
+                        "Kliknij w poniższy kod aby potwierdzić swoje konto: <br/>" +
+                        callbackUrl + "<br/>" +
+                        "Życzymy owocnej pracy <br/>" +
+                        "<br/>" +
+                        "Developerzy aplikacji"
+                    };
+
+                    smtpClient.Send(message);
 
                     return RedirectToAction("Index", "Home");
                 }
