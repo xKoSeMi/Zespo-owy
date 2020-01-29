@@ -25,6 +25,7 @@ namespace ProjektZespolowy2.Models
         public DbSet<MAC> MACs { get; set; }
         public DbSet<Browser> Browsers { get; set; }
 
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
